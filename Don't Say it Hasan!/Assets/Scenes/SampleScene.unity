@@ -430,7 +430,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Azan
+  m_text: Hello
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -519,3 +519,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 971dfd2e316692340b3e730a23671033, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myColor:
+    serializedVersion: 2
+    rgba: 3618759
