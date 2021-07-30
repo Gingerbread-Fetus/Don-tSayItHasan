@@ -10,21 +10,22 @@ public class KBInListener : MonoBehaviour
     TextMeshProUGUI gt;
     private TMP_Text m_TextComponent;
     TMP_TextInfo textInfo;
-    string targetString;
+    [HideInInspector]
+    public string targetString;
     string currentString = "";
     int currentCharacter = 0;
+    TextTarget textTarget;
 
     Color32 c0;
-
     void Awake()
     {
         m_TextComponent = GetComponent<TMP_Text>();
         textInfo = m_TextComponent.textInfo;
+        textTarget = GetComponent<TextTarget>();
     }
     void Start()
     {
         gt = GetComponent<TextMeshProUGUI>();
-        targetString = gt.text;
     }
 
     // Update is called once per frame
@@ -50,7 +51,6 @@ public class KBInListener : MonoBehaviour
             {
                 currentString += c;
                 currentCharacter = currentString.Length;
-                // StartCoroutine(MarkCorrectText());
                 if (currentString == targetString.Substring(0, currentString.Length))
                 {
                     MarkCorrectCharacters();
@@ -66,6 +66,7 @@ public class KBInListener : MonoBehaviour
                 if (targetString == currentString)
                 {
                     m_TextComponent.ForceMeshUpdate();
+                    textTarget.ChangeWord();
                     print("correct");
                     currentString = "";
                     currentCharacter = 0;
@@ -73,6 +74,13 @@ public class KBInListener : MonoBehaviour
             }
             print(currentString.Length);
         }
+    }
+
+    public void SetText(string newText)
+    {
+        gt = GetComponent<TextMeshProUGUI>();
+        gt.text = newText;
+        targetString = gt.text;
     }
 
     private void MarkCorrectCharacters()
