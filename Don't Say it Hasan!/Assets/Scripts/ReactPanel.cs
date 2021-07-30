@@ -6,6 +6,9 @@ public class ReactPanel : MonoBehaviour
 {
     [SerializeField] int maxWordsOnScreen = 3;
     [SerializeField] GameObject targetWordPrefab;
+    [SerializeField] float yOffset = 100;
+    [SerializeField] float xOffset = 100;
+
     private RectTransform m_RectTransform;
     private TextTarget selected;//TODO: Only the selected should be receiving input.
 
@@ -13,7 +16,7 @@ public class ReactPanel : MonoBehaviour
     {
         m_RectTransform = GetComponent<RectTransform>();
 
-        for(int i = 0;i<maxWordsOnScreen;i++)
+        for (int i = 0; i < maxWordsOnScreen; i++)
         {
             AddNewWord();
         }
@@ -29,8 +32,8 @@ public class ReactPanel : MonoBehaviour
 
     public void MoveWord(RectTransform word)
     {
-        float randX = Random.Range(m_RectTransform.rect.xMin, m_RectTransform.rect.xMax);
-        float randY = Random.Range(m_RectTransform.rect.yMin, m_RectTransform.rect.yMax);
+        float randX = Random.Range(m_RectTransform.rect.xMin + xOffset, m_RectTransform.rect.xMax - xOffset);
+        float randY = Random.Range(m_RectTransform.rect.yMin + yOffset, m_RectTransform.rect.yMax - yOffset);
         word.localPosition = new Vector3(randX, randY, 0);
     }
 }

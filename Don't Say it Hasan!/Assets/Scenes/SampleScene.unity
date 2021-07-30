@@ -233,16 +233,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingWords:
-  - Hello
-  - Hasan
-  - would
-  - you
-  - like
-  - to
-  - play
   - a
-  - game?
-  - 9/11
+  - a
+  - a
+  - a
+  - a
+  - a
+  - a
+  - a
+  - a
+  - a
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -361,7 +361,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -174.556, y: 10.028015}
+  m_AnchoredPosition: {x: -174.55591, y: 10.028076}
   m_SizeDelta: {x: -400.55, y: -59.171}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &840372796
@@ -378,6 +378,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxWordsOnScreen: 3
   targetWordPrefab: {fileID: 5250841861681134669, guid: 7db5794d11f47034da07b8c43963e89c, type: 3}
+  yOffset: 100
+  xOffset: 100
 --- !u!114 &840372797
 MonoBehaviour:
   m_ObjectHideFlags: 0
