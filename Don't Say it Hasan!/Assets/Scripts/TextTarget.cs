@@ -7,6 +7,8 @@ namespace CoreInput
     public class TextTarget : MonoBehaviour
     {
         [SerializeField] Color32 myColor;
+        [SerializeField] GameObject background;
+
         Color32[] newVertexColors;
         private TMP_Text m_TextComponent;
         TMP_TextInfo textInfo;
@@ -17,9 +19,9 @@ namespace CoreInput
         int currentCharacter = 0;
         WordQueue queue;
 
-        [HideInInspector]public bool isSelected = false;
-        [HideInInspector]public string targetString;
-        void Awake() 
+        [HideInInspector] public bool isSelected = false;
+        [HideInInspector] public string targetString;
+        void Awake()
         {
             queue = GameObject.FindGameObjectWithTag("Word Queue").GetComponent<WordQueue>();
             m_RectTransform = GetComponent<RectTransform>();
@@ -32,6 +34,7 @@ namespace CoreInput
         void Update()
         {
             HandleInput();
+            background.SetActive(isSelected);
         }
         private void HandleInput()
         {

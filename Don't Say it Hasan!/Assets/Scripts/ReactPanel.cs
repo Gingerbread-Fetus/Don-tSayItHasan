@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
 namespace CoreInput
 {
@@ -13,7 +14,7 @@ namespace CoreInput
 
         private RectTransform m_RectTransform;
         // private List<TextTarget> targets;
-        private Queue<TextTarget> targets;
+        private CircleBuffer<TextTarget> targets;
         public static TextTarget selected;
 
         void Start()
@@ -26,25 +27,38 @@ namespace CoreInput
             }
 
             //Set the first TextTarget child of m_Rect to be the selected word.
-            targets = new Queue<TextTarget>(transform.GetComponentsInChildren<TextTarget>());
-            selected = targets.Dequeue();
+            targets = new CircleBuffer<TextTarget>(transform.GetComponentsInChildren<TextTarget>());
+            selected = targets.MoveNext();
             selected.isSelected = true;
         }
 
-        private void Update() 
+        private void Update()
         {
-            if(Input.GetButtonDown("Switch"))
+            if (Input.GetButtonDown("Switch"))
             {
-                SwitchTarget();
+                SwitchForward();
+            }
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            {
+                if (Input.GetButtonDown("Switch"))
+                {
+                    SwitchBackward();
+                }
             }
         }
 
-        private void SwitchTarget()
+        private void SwitchForward()
         {
             selected.isSelected = false;
-            targets.Enqueue(selected);
-            selected = targets.Dequeue();
+            selected = targets.MoveNext();
+            selected.isSelected = true;
+        }
+
+        private void SwitchBackward()
+        {
             selected.isSelected = false;
+            selected = targets.MoveBack();
+            selected.isSelected = true;
         }
 
         public void AddNewWord()
