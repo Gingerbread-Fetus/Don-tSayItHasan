@@ -1,5 +1,4 @@
 using TMPro;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace CoreInput
@@ -39,9 +38,10 @@ namespace CoreInput
             HandleInput();
             background.SetActive(isSelected);
         }
+
         private void HandleInput()
         {
-            if (isSelected)
+            if (isSelected && !ReactPanel.isSwitching && Input.anyKeyDown)
             {
                 foreach (char c in Input.inputString)
                 {
@@ -61,7 +61,16 @@ namespace CoreInput
                     {
                         currentString += c;
                         currentCharacter = currentString.Length;
-                        if (currentString == targetString.Substring(0, currentString.Length))
+                        if (targetString == currentString)
+                        {
+                            currentString = "";
+                            currentCharacter = 0;
+                            m_TextComponent.ForceMeshUpdate();
+                            score.AddScore(100);
+                            ChangeWord();
+                            GetComponentInParent<ReactPanel>().SwitchForward();
+                        }
+                        else if (currentString == targetString.Substring(0, currentString.Length))
                         {
                             MarkCorrectCharacters();
                         }
@@ -71,15 +80,6 @@ namespace CoreInput
                             currentString = "";
                             score.AddScore(-100);
                             stressBar.AddStress(0.05f);
-                            currentCharacter = 0;
-                        }
-
-                        if (targetString == currentString)
-                        {
-                            m_TextComponent.ForceMeshUpdate();
-                            ChangeWord();
-                            score.AddScore(100);
-                            currentString = "";
                             currentCharacter = 0;
                         }
                     }
@@ -93,11 +93,13 @@ namespace CoreInput
             targetString = m_TextComponent.text;
             GetComponentInParent<ReactPanel>().MoveWord(m_RectTransform);
         }
+
         public void SetText(string newText)
         {
             m_TextComponent.text = newText;
             targetString = m_TextComponent.text;
         }
+
         private void MarkCorrectCharacters()
         {
             m_TextComponent.ForceMeshUpdate();
