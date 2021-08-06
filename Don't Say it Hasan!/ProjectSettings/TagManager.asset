@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Word Queue
+  - Score
+  - Stress
   layers:
   - Default
   - TransparentFX

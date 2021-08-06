@@ -8,11 +8,12 @@ namespace CoreInput
     {
         [SerializeField] Color32 myColor;
         [SerializeField] GameObject background;
-
         Color32[] newVertexColors;
         private TMP_Text m_TextComponent;
         TMP_TextInfo textInfo;
         TextTarget textTarget;
+        StressBar stressBar;
+        Score score;
         Color32 c0;
         private RectTransform m_RectTransform;
         string currentString = "";
@@ -24,6 +25,8 @@ namespace CoreInput
         void Awake()
         {
             queue = GameObject.FindGameObjectWithTag("Word Queue").GetComponent<WordQueue>();
+            score = GameObject.FindGameObjectWithTag("Score").GetComponent<Score>();
+            stressBar = GameObject.FindGameObjectWithTag("Stress").GetComponent<StressBar>();
             m_RectTransform = GetComponent<RectTransform>();
             m_TextComponent = GetComponent<TMP_Text>();
             textInfo = m_TextComponent.textInfo;
@@ -50,8 +53,7 @@ namespace CoreInput
                     else if ((c == '\n') || (c == '\r')) // enter/return
                     {
                         //check against final text, mostly as a failsafe
-                        if (targetString == currentString) print("correct");
-                        else print("WRONG DUD");
+                        if (targetString == currentString) score.AddScore(100);
                         currentString = "";
                         currentCharacter = 0;
                     }
@@ -67,7 +69,8 @@ namespace CoreInput
                         {
                             m_TextComponent.ForceMeshUpdate();//I think this resets the mesh.
                             currentString = "";
-                            print("WRONG DUD");
+                            score.AddScore(-100);
+                            stressBar.AddStress(0.05f);
                             currentCharacter = 0;
                         }
 
@@ -75,7 +78,7 @@ namespace CoreInput
                         {
                             m_TextComponent.ForceMeshUpdate();
                             ChangeWord();
-                            print("correct");
+                            score.AddScore(100);
                             currentString = "";
                             currentCharacter = 0;
                         }
