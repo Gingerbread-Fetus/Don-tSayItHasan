@@ -12,7 +12,6 @@ namespace CoreInput
         [SerializeField] float yOffset = 100;
         [SerializeField] float xOffset = 100;
         private RectTransform m_RectTransform;
-        // private List<TextTarget> targets;
         private CircleBuffer<TextTarget> targets;
         public static TextTarget selected;
         public static bool isSwitching = false;
