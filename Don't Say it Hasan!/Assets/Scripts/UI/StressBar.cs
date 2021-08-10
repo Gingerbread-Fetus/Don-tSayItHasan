@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+using Core;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace UI
 {
-    public class StressBar : MonoBehaviour
+    public class StressBar : MonoBehaviour, ITimed
     {
         Slider slider;
         private void Awake()
@@ -16,6 +15,10 @@ namespace UI
         public void AddStress(float damage)
         {
             slider.value += damage;
+        }
+
+        public void TimesUp()
+        {
         }
     }
 }

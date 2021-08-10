@@ -1,29 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
-using System.ComponentModel;
 using System.Net.Sockets;
 using System.IO;
-using UnityEngine.UI;
-using TMPro;
+using Core;
 
 namespace UI
 {
-    public class TwitchChat : MonoBehaviour
+    public class TwitchChat : MonoBehaviour, ITimed
     {
         private TcpClient twitchClient;
         private StreamReader reader;
         private StreamWriter writer;
 
         public string username, channelName;
+        public bool timesUp = false;
         private string password = "oauth:140lnc8fwf3gaf32de494zhnoft0c3"; //Get the password from https://twitchapps.com/tmi
         [SerializeField] GameObject chatterObject;
 
-        void Start()
+        private void Awake()
         {
             Connect();
-            GetNames();
         }
 
         void Update()
@@ -33,11 +28,6 @@ namespace UI
                 Connect();
             }
             ReadChat();
-        }
-
-        private void GetNames()
-        {
-            writer.WriteLine("");
         }
 
         private void Connect()
@@ -55,10 +45,10 @@ namespace UI
 
         private void ReadChat()
         {
-            if (twitchClient.Available > 0)
+            if (twitchClient.Available > 0 && !timesUp)
             {
                 var message = reader.ReadLine(); //Read in the current message
-                print(message);
+                // print(message);
                 if (message.Contains("PRIVMSG"))
                 {
                     //Get the users name by splitting it from the string
@@ -79,6 +69,13 @@ namespace UI
                     chatter.SetMessage("This is a test message, you should replace it later");
                 }
             }
+        }
+
+        public void TimesUp()
+        {
+            timesUp = true;
+            reader.Close();
+            twitchClient.Close();
         }
     }
 }

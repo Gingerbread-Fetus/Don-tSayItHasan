@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core;
 using UnityEngine;
 using Utility;
 
 namespace CoreInput
 {
-    public class ReactPanel : MonoBehaviour
+    public class ReactPanel : MonoBehaviour, ITimed
     {
         [SerializeField] int startingNumberOfWords = 3;
         [SerializeField] GameObject targetWordPrefab;
@@ -15,6 +16,7 @@ namespace CoreInput
         private CircleBuffer<TextTarget> targets;
         public static TextTarget selected;
         public static bool isSwitching = false;
+        public static bool TimesUp = false;
 
         void Start()
         {
@@ -33,11 +35,11 @@ namespace CoreInput
 
         private void Update()
         {
-            if (Input.GetButtonDown("Switch"))
+            if (Input.GetButtonDown("Switch") && !TimesUp)
             {
                 SwitchForward();
             }
-            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) && !TimesUp)
             {
                 if (Input.GetButtonDown("Switch"))
                 {
@@ -80,6 +82,11 @@ namespace CoreInput
             isSwitching = true;
             yield return new WaitUntil(() => !Input.anyKey);
             isSwitching = false;
+        }
+
+        void ITimed.TimesUp()
+        {
+            TimesUp = true;
         }
     }
 }

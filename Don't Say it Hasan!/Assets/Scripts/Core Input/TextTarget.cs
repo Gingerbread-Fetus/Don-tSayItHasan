@@ -22,7 +22,7 @@ namespace CoreInput
         WordQueue queue;
 
         [HideInInspector] public bool isSelected = false;
-        [HideInInspector] public string targetString;
+        public string targetString;
         void Awake()
         {
             queue = GameObject.FindGameObjectWithTag("Word Queue").GetComponent<WordQueue>();
@@ -43,7 +43,7 @@ namespace CoreInput
 
         private void HandleInput()
         {
-            if (isSelected && !ReactPanel.isSwitching && Input.anyKeyDown)
+            if (isSelected && !ReactPanel.isSwitching && Input.anyKeyDown && !ReactPanel.TimesUp)
             {
                 foreach (char c in Input.inputString)
                 {
@@ -63,7 +63,7 @@ namespace CoreInput
                     {
                         currentString += c;
                         currentCharacter = currentString.Length;
-                        if (targetString == currentString)
+                        if (targetString.Equals(currentString))
                         {
                             currentString = "";
                             currentCharacter = 0;
@@ -72,13 +72,13 @@ namespace CoreInput
                             ChangeWord();
                             GetComponentInParent<ReactPanel>().SwitchForward();
                         }
-                        else if (currentString == targetString.Substring(0, currentString.Length))
+                        else if (currentString.Equals(targetString.Substring(0, currentString.Length)))
                         {
                             MarkCorrectCharacters();
                         }
                         else
                         {
-                            m_TextComponent.ForceMeshUpdate();//I think this resets the mesh.
+                            m_TextComponent.ForceMeshUpdate();//it's important to update the mesh.
                             currentString = "";
                             score.AddScore(-100);
                             stressBar.AddStress(0.05f);
@@ -91,8 +91,7 @@ namespace CoreInput
 
         public void ChangeWord()
         {
-            m_TextComponent.text = queue.GetNextWord();
-            targetString = m_TextComponent.text;
+            SetText(queue.GetNextWord());
             GetComponentInParent<ReactPanel>().MoveWord(m_RectTransform);
         }
 
