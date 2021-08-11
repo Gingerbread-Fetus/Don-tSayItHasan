@@ -8,6 +8,10 @@ namespace Core
     {
         [SerializeField] GameObject endGamePanel;
         List<ITimed> timedObjects;
+        [HideInInspector] public int wordCount = 0;
+        [HideInInspector] public int score = 0;
+        [HideInInspector] public float stressLevel = 0f;
+        public float levelTime = 60f;
 
         private void Start()
         {
@@ -31,6 +35,17 @@ namespace Core
             }
             //Start end game transition
             endGamePanel.SetActive(true);
+        }
+
+        public void Reset()
+        {
+            foreach (ITimed timed in timedObjects)
+            {
+                timed.Reset();
+            }
+            wordCount = 0;
+            score = 0;
+            stressLevel = 0f;
         }
     }
 }

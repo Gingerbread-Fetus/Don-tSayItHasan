@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -9,6 +7,7 @@ namespace UI
     public class Chatter : MonoBehaviour
     {
         TMP_Text m_TextComponent;
+        string chatterName = "";
         private void Awake()
         {
             m_TextComponent = GetComponent<TMP_Text>();
@@ -17,8 +16,9 @@ namespace UI
         public void SetName(string nameText)
         {
             var random = new System.Random();
+            chatterName = nameText;
             var color = String.Format("#{0:X6}", random.Next(0x1000000));
-            string newText = "<color=" + color + ">" + nameText + "</color>";
+            string newText = "<color=" + color + ">" + chatterName + "</color>";
             m_TextComponent.text = newText;
         }
 

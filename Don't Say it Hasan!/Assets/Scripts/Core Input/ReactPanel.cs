@@ -88,6 +88,11 @@ namespace CoreInput
         {
             TimesUp = true;
         }
+
+        public void Reset()
+        {
+            TimesUp = false;
+        }
     }
 }
 

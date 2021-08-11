@@ -4,21 +4,21 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class StressBar : MonoBehaviour, ITimed
+    public class StressBar : MonoBehaviour
     {
         Slider slider;
+
+        SceneDirector director;
+
         private void Awake()
         {
             slider = GetComponent<Slider>();
+            director = GameObject.FindGameObjectWithTag("Director").GetComponent<SceneDirector>();
         }
 
-        public void AddStress(float damage)
+        private void Update()
         {
-            slider.value += damage;
-        }
-
-        public void TimesUp()
-        {
+            slider.value = director.stressLevel;
         }
     }
 }

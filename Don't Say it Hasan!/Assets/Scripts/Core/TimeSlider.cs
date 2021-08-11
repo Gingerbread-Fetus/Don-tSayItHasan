@@ -4,15 +4,18 @@ using UnityEngine.UI;
 
 namespace Core
 {
-    public class TimeSlider : MonoBehaviour
+    public class TimeSlider : MonoBehaviour, ITimed
     {
         [SerializeField] UnityEvent onTimesUp;
-        [SerializeField] float levelTime;
+        float levelTime;
         float currentTime = 0;
+        private SceneDirector director;
         Slider sliderCmp;
         // Start is called before the first frame update
         void Start()
         {
+            director = GameObject.FindGameObjectWithTag("Director").GetComponent<SceneDirector>();
+            levelTime = director.levelTime;
             sliderCmp = GetComponent<Slider>();
             Invoke("OnTimesUp", levelTime);
         }
@@ -35,6 +38,17 @@ namespace Core
         void OnTimesUp()
         {
             onTimesUp.Invoke();
+        }
+
+        public void TimesUp()
+        {
+        }
+
+        public void Reset()
+        {
+            sliderCmp.value = 0f;
+            currentTime = 0;
+            Invoke("OnTimesUp", levelTime);
         }
     }
 }

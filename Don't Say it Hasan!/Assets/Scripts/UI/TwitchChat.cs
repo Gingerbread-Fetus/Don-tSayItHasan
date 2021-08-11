@@ -7,6 +7,7 @@ namespace UI
 {
     public class TwitchChat : MonoBehaviour, ITimed
     {
+        [SerializeField] int chatMaxSize = 30;
         private TcpClient twitchClient;
         private StreamReader reader;
         private StreamWriter writer;
@@ -28,6 +29,11 @@ namespace UI
                 Connect();
             }
             ReadChat();
+
+            if (transform.childCount > chatMaxSize)
+            {
+                Destroy(transform.GetChild(0).gameObject);
+            }
         }
 
         private void Connect()
@@ -76,6 +82,11 @@ namespace UI
             timesUp = true;
             reader.Close();
             twitchClient.Close();
+        }
+
+        public void Reset()
+        {
+            timesUp = false;
         }
     }
 }

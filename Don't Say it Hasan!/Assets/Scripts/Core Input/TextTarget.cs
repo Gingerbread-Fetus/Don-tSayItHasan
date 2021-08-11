@@ -1,3 +1,4 @@
+using Core;
 using TMPro;
 using UI;
 using UnityEngine;
@@ -14,7 +15,7 @@ namespace CoreInput
         TMP_TextInfo textInfo;
         TextTarget textTarget;
         StressBar stressBar;
-        Score score;
+        SceneDirector director;
         Color32 c0;
         private RectTransform m_RectTransform;
         string currentString = "";
@@ -26,8 +27,7 @@ namespace CoreInput
         void Awake()
         {
             queue = GameObject.FindGameObjectWithTag("Word Queue").GetComponent<WordQueue>();
-            score = GameObject.FindGameObjectWithTag("Score").GetComponent<Score>();
-            stressBar = GameObject.FindGameObjectWithTag("Stress").GetComponent<StressBar>();
+            director = GameObject.FindGameObjectWithTag("Director").GetComponent<SceneDirector>();
             m_RectTransform = GetComponent<RectTransform>();
             m_TextComponent = GetComponent<TMP_Text>();
             textInfo = m_TextComponent.textInfo;
@@ -55,7 +55,7 @@ namespace CoreInput
                     else if ((c == '\n') || (c == '\r')) // enter/return
                     {
                         //check against final text, mostly as a failsafe
-                        if (targetString == currentString) score.AddScore(100);
+                        if (targetString == currentString) director.score += 100;
                         currentString = "";
                         currentCharacter = 0;
                     }
@@ -68,7 +68,8 @@ namespace CoreInput
                             currentString = "";
                             currentCharacter = 0;
                             m_TextComponent.ForceMeshUpdate();
-                            score.AddScore(100);
+                            director.score += 100;
+                            director.wordCount += 1;
                             ChangeWord();
                             GetComponentInParent<ReactPanel>().SwitchForward();
                         }
@@ -80,8 +81,8 @@ namespace CoreInput
                         {
                             m_TextComponent.ForceMeshUpdate();//it's important to update the mesh.
                             currentString = "";
-                            score.AddScore(-100);
-                            stressBar.AddStress(0.05f);
+                            director.score -= 100;
+                            director.stressLevel += 0.05f;
                             currentCharacter = 0;
                         }
                     }
