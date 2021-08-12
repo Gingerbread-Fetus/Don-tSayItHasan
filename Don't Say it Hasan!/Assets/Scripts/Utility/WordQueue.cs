@@ -8,9 +8,11 @@ namespace Utility
     public class WordQueue : MonoBehaviour
     {
         public TextAsset wordList;
+        private int size;
         private List<string> startingWords;
         private Queue<String> wordQueue;
 
+        public int Size { get => wordQueue.Count; }
 
         void Awake()
         {

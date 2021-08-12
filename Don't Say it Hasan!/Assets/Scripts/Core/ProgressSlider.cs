@@ -4,30 +4,44 @@ using UnityEngine.UI;
 
 namespace Core
 {
-    public class TimeSlider : MonoBehaviour, ITimed
+    public class ProgressSlider : MonoBehaviour, ITimed
     {
-        [SerializeField] UnityEvent onTimesUp;
+        [SerializeField] UnityEvent onFinish;
         float levelTime;
-        float currentTime = 0;
         private SceneDirector director;
         Slider sliderCmp;
+
+        public float CurrentProgress
+        {
+            get
+            {
+                return sliderCmp.value;
+            }
+            set
+            {
+                if (value >= sliderCmp.maxValue)
+                {
+                    onFinish.Invoke();
+                }
+                sliderCmp.value = value % sliderCmp.maxValue;
+            }
+        }
+
         // Start is called before the first frame update
         void Start()
         {
             director = GameObject.FindGameObjectWithTag("Director").GetComponent<SceneDirector>();
             levelTime = director.levelTime;
             sliderCmp = GetComponent<Slider>();
-            Invoke("OnTimesUp", levelTime);
+            if (onFinish == null)
+            {
+                onFinish = new UnityEvent();
+            }
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (sliderCmp.value < 1.0f)
-            {
-                currentTime += Time.deltaTime;
-                sliderCmp.value = currentTime / levelTime;
-            }
         }
 
         public float GetProgress()
@@ -35,9 +49,9 @@ namespace Core
             return sliderCmp.value * 100;
         }
 
-        void OnTimesUp()
+        void OnFinish()
         {
-            onTimesUp.Invoke();
+            onFinish.Invoke();
         }
 
         public void TimesUp()
@@ -47,8 +61,6 @@ namespace Core
         public void Reset()
         {
             sliderCmp.value = 0f;
-            currentTime = 0;
-            Invoke("OnTimesUp", levelTime);
         }
     }
 }

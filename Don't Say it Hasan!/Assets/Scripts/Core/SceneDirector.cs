@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Utility;
 
 namespace Core
 {
@@ -8,13 +9,17 @@ namespace Core
     {
         [SerializeField] GameObject endGamePanel;
         List<ITimed> timedObjects;
+        ProgressSlider slider;
+
         [HideInInspector] public int wordCount = 0;
+        [HideInInspector] public int totalWords = 0;
         [HideInInspector] public int score = 0;
         [HideInInspector] public float stressLevel = 0f;
-        public float levelTime = 60f;
+        public float levelTime = 0f;
 
         private void Start()
         {
+            slider = FindObjectOfType<ProgressSlider>();
             timedObjects = new List<ITimed>();
             GameObject[] rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
             foreach (var rootGameObject in rootGameObjects)
@@ -25,9 +30,16 @@ namespace Core
                     timedObjects.Add(childInterface);
                 }
             }
+            totalWords = GameObject.FindGameObjectWithTag("Word Queue").GetComponent<WordQueue>().Size;
         }
 
-        public void TimesUp()
+        private void Update()
+        {
+            slider.CurrentProgress = ((float)wordCount / (float)totalWords);
+            levelTime += Time.deltaTime;
+        }
+
+        public void FinishGame()
         {
             foreach (ITimed timed in timedObjects)
             {
