@@ -1,0 +1,7 @@
+Buff ideas
+-Increase multiplier (TODO: Display multiplier somewhere?)
+-Change timescale
+-Change/set multiplier
+-Instantly complete x words
+-Remove Stress
+-Instant Subs

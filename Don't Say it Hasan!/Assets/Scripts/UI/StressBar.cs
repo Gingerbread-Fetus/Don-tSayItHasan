@@ -1,24 +1,41 @@
 using Core;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace UI
 {
     public class StressBar : MonoBehaviour
     {
-        Slider slider;
+        [SerializeField] UnityEvent onLose;
 
-        SceneDirector director;
+        Slider slider;
+        float currentStress;
+
+        public float CurrentStress
+        {
+            get
+            {
+                return currentStress;
+            }
+            set
+            {
+                if (currentStress >= slider.maxValue)
+                {
+                    onLose.Invoke();
+                }
+                currentStress = value;
+            }
+        }
 
         private void Awake()
         {
             slider = GetComponent<Slider>();
-            director = GameObject.FindGameObjectWithTag("Director").GetComponent<SceneDirector>();
         }
 
         private void Update()
         {
-            slider.value = director.stressLevel;
+            slider.value = currentStress;
         }
     }
 }

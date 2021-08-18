@@ -1,6 +1,5 @@
 using Core;
 using TMPro;
-using UI;
 using UnityEngine;
 using Utility;
 
@@ -13,8 +12,6 @@ namespace CoreInput
         Color32[] newVertexColors;
         private TMP_Text m_TextComponent;
         TMP_TextInfo textInfo;
-        TextTarget textTarget;
-        StressBar stressBar;
         SceneDirector director;
         Color32 c0;
         private RectTransform m_RectTransform;
@@ -43,7 +40,7 @@ namespace CoreInput
 
         private void HandleInput()
         {
-            if (isSelected && !ReactPanel.isSwitching && Input.anyKeyDown && !ReactPanel.TimesUp)
+            if (isSelected && !ReactPanel.isSwitching && Input.anyKeyDown && !ReactPanel.timeOut)
             {
                 foreach (char c in Input.inputString)
                 {
@@ -55,7 +52,7 @@ namespace CoreInput
                     else if ((c == '\n') || (c == '\r')) // enter/return
                     {
                         //check against final text, mostly as a failsafe
-                        if (targetString == currentString) director.score += 100;
+                        if (targetString == currentString) director.AddScore(targetString.Length);
                         currentString = "";
                         currentCharacter = 0;
                     }
@@ -68,7 +65,7 @@ namespace CoreInput
                             currentString = "";
                             currentCharacter = 0;
                             m_TextComponent.ForceMeshUpdate();
-                            director.score += 100;
+                            director.AddScore(targetString.Length);
                             director.wordCount += 1;
                             ChangeWord();
                             GetComponentInParent<ReactPanel>().SwitchForward();
@@ -81,8 +78,8 @@ namespace CoreInput
                         {
                             m_TextComponent.ForceMeshUpdate();//it's important to update the mesh.
                             currentString = "";
-                            director.score -= 100;
-                            director.stressLevel += 0.05f;
+                            director.AddScore(-targetString.Length);
+                            director.AddStress(0.05f);
                             currentCharacter = 0;
                         }
                     }

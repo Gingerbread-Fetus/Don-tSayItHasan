@@ -7,9 +7,10 @@ namespace Core
     public class ProgressSlider : MonoBehaviour, ITimed
     {
         [SerializeField] UnityEvent onFinish;
-        float levelTime;
         private SceneDirector director;
         Slider sliderCmp;
+        [HideInInspector] public float wordCount;
+        [HideInInspector] public float totalWords;
 
         public float CurrentProgress
         {
@@ -31,7 +32,6 @@ namespace Core
         void Start()
         {
             director = GameObject.FindGameObjectWithTag("Director").GetComponent<SceneDirector>();
-            levelTime = director.levelTime;
             sliderCmp = GetComponent<Slider>();
             if (onFinish == null)
             {
@@ -42,16 +42,14 @@ namespace Core
         // Update is called once per frame
         void Update()
         {
-        }
-
-        public float GetProgress()
-        {
-            return sliderCmp.value * 100;
+            wordCount = director.wordCount;
+            CurrentProgress = ((float)wordCount / (float)totalWords);
         }
 
         void OnFinish()
         {
             onFinish.Invoke();
+            TimesUp();
         }
 
         public void TimesUp()

@@ -16,7 +16,7 @@ namespace CoreInput
         private CircleBuffer<TextTarget> targets;
         public static TextTarget selected;
         public static bool isSwitching = false;
-        public static bool TimesUp = false;
+        public static bool timeOut = false;
 
         void Start()
         {
@@ -35,11 +35,11 @@ namespace CoreInput
 
         private void Update()
         {
-            if (Input.GetButtonDown("Switch") && !TimesUp)
+            if (Input.GetButtonDown("Switch") && !timeOut)
             {
                 SwitchForward();
             }
-            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) && !TimesUp)
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) && !timeOut)
             {
                 if (Input.GetButtonDown("Switch"))
                 {
@@ -84,14 +84,14 @@ namespace CoreInput
             isSwitching = false;
         }
 
-        void ITimed.TimesUp()
-        {
-            TimesUp = true;
-        }
-
         public void Reset()
         {
-            TimesUp = false;
+            timeOut = false;
+        }
+
+        public void TimesUp()
+        {
+            timeOut = true;
         }
     }
 }

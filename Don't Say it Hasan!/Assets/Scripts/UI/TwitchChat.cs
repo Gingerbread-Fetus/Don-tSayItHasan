@@ -72,7 +72,7 @@ namespace UI
                     GameObject newChatter = Instantiate(chatterObject, transform, false);
                     var chatter = newChatter.GetComponent<Chatter>();
                     chatter.SetName(chatName);
-                    chatter.SetMessage("This is a test message, you should replace it later");
+                    chatter.SetMessage(message);
                 }
             }
         }
@@ -87,6 +87,8 @@ namespace UI
         public void Reset()
         {
             timesUp = false;
+            Connect();
+            print("resetting chat");
         }
     }
 }

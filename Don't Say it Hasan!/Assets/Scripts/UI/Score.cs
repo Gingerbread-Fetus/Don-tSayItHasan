@@ -11,6 +11,7 @@ namespace UI
         SceneDirector director;
         TMP_Text m_textComponent;
         int score = 0;
+        public float multiplier = 1f;
         void Awake()
         {
             director = GameObject.FindGameObjectWithTag("Director").GetComponent<SceneDirector>();
@@ -24,9 +25,14 @@ namespace UI
             m_textComponent.text = score.ToString() + "/";
         }
 
-        public void AddScore(int change)
+        public void SetMultiplier(float newMultiplier)
         {
-            score += change;
+            multiplier = newMultiplier;
+        }
+
+        public void ChangeMultiplier(float deltaChange)
+        {
+            multiplier += deltaChange;
         }
     }
 }

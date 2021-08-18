@@ -22,9 +22,14 @@ namespace UI
             m_TextComponent.text = newText;
         }
 
+        public string GetName()
+        {
+            return chatterName;
+        }
+
         public void SetMessage(string chatMessage)
         {
-            m_TextComponent.text += chatMessage;
+            m_TextComponent.text += ": " + chatMessage;
         }
     }
 }
