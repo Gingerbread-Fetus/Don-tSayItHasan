@@ -1,6 +1,7 @@
+using Core;
 using TMPro;
-using System.Collections.Generic;
 using UnityEngine;
+using Utility;
 
 namespace CoreInput
 {
@@ -11,9 +12,7 @@ namespace CoreInput
         Color32[] newVertexColors;
         private TMP_Text m_TextComponent;
         TMP_TextInfo textInfo;
-        TextTarget textTarget;
-        StressBar stressBar;
-        Score score;
+        SceneDirector director;
         Color32 c0;
         private RectTransform m_RectTransform;
         string currentString = "";
@@ -21,12 +20,11 @@ namespace CoreInput
         WordQueue queue;
 
         [HideInInspector] public bool isSelected = false;
-        [HideInInspector] public string targetString;
+        public string targetString;
         void Awake()
         {
             queue = GameObject.FindGameObjectWithTag("Word Queue").GetComponent<WordQueue>();
-            score = GameObject.FindGameObjectWithTag("Score").GetComponent<Score>();
-            stressBar = GameObject.FindGameObjectWithTag("Stress").GetComponent<StressBar>();
+            director = GameObject.FindGameObjectWithTag("Director").GetComponent<SceneDirector>();
             m_RectTransform = GetComponent<RectTransform>();
             m_TextComponent = GetComponent<TMP_Text>();
             textInfo = m_TextComponent.textInfo;
@@ -39,9 +37,10 @@ namespace CoreInput
             HandleInput();
             background.SetActive(isSelected);
         }
+
         private void HandleInput()
         {
-            if (isSelected)
+            if (isSelected && !ReactPanel.isSwitching && Input.anyKeyDown && !ReactPanel.timeOut)
             {
                 foreach (char c in Input.inputString)
                 {
@@ -53,7 +52,7 @@ namespace CoreInput
                     else if ((c == '\n') || (c == '\r')) // enter/return
                     {
                         //check against final text, mostly as a failsafe
-                        if (targetString == currentString) score.AddScore(100);
+                        if (targetString == currentString) director.AddScore(targetString.Length);
                         currentString = "";
                         currentCharacter = 0;
                     }
@@ -61,25 +60,26 @@ namespace CoreInput
                     {
                         currentString += c;
                         currentCharacter = currentString.Length;
-                        if (currentString == targetString.Substring(0, currentString.Length))
+                        if (targetString.Equals(currentString))
+                        {
+                            currentString = "";
+                            currentCharacter = 0;
+                            m_TextComponent.ForceMeshUpdate();
+                            director.AddScore(targetString.Length);
+                            director.wordCount += 1;
+                            ChangeWord();
+                            GetComponentInParent<ReactPanel>().SwitchForward();
+                        }
+                        else if (currentString.Equals(targetString.Substring(0, currentString.Length)))
                         {
                             MarkCorrectCharacters();
                         }
                         else
                         {
-                            m_TextComponent.ForceMeshUpdate();//I think this resets the mesh.
+                            m_TextComponent.ForceMeshUpdate();//it's important to update the mesh.
                             currentString = "";
-                            score.AddScore(-100);
-                            stressBar.AddStress(0.05f);
-                            currentCharacter = 0;
-                        }
-
-                        if (targetString == currentString)
-                        {
-                            m_TextComponent.ForceMeshUpdate();
-                            ChangeWord();
-                            score.AddScore(100);
-                            currentString = "";
+                            director.AddScore(-targetString.Length);
+                            director.AddStress(0.05f);
                             currentCharacter = 0;
                         }
                     }
@@ -89,15 +89,16 @@ namespace CoreInput
 
         public void ChangeWord()
         {
-            m_TextComponent.text = queue.GetNextWord();
-            targetString = m_TextComponent.text;
+            SetText(queue.GetNextWord());
             GetComponentInParent<ReactPanel>().MoveWord(m_RectTransform);
         }
+
         public void SetText(string newText)
         {
             m_TextComponent.text = newText;
             targetString = m_TextComponent.text;
         }
+
         private void MarkCorrectCharacters()
         {
             m_TextComponent.ForceMeshUpdate();

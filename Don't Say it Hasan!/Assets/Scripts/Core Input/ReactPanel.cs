@@ -1,20 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using Core;
 using UnityEngine;
 using Utility;
 
 namespace CoreInput
 {
-    public class ReactPanel : MonoBehaviour
+    public class ReactPanel : MonoBehaviour, ITimed
     {
         [SerializeField] int startingNumberOfWords = 3;
         [SerializeField] GameObject targetWordPrefab;
         [SerializeField] float yOffset = 100;
         [SerializeField] float xOffset = 100;
         private RectTransform m_RectTransform;
-        // private List<TextTarget> targets;
         private CircleBuffer<TextTarget> targets;
         public static TextTarget selected;
+        public static bool isSwitching = false;
+        public static bool timeOut = false;
 
         void Start()
         {
@@ -33,11 +35,11 @@ namespace CoreInput
 
         private void Update()
         {
-            if (Input.GetButtonDown("Switch"))
+            if (Input.GetButtonDown("Switch") && !timeOut)
             {
                 SwitchForward();
             }
-            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
+            if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift) && !timeOut)
             {
                 if (Input.GetButtonDown("Switch"))
                 {
@@ -46,15 +48,17 @@ namespace CoreInput
             }
         }
 
-        private void SwitchForward()
+        public void SwitchForward()
         {
+            StartCoroutine(WaitForKeyUp());
             selected.isSelected = false;
             selected = targets.MoveNext();
             selected.isSelected = true;
         }
 
-        private void SwitchBackward()
+        public void SwitchBackward()
         {
+            StartCoroutine(WaitForKeyUp());
             selected.isSelected = false;
             selected = targets.MoveBack();
             selected.isSelected = true;
@@ -71,6 +75,23 @@ namespace CoreInput
             float randX = Random.Range(m_RectTransform.rect.xMin + xOffset, m_RectTransform.rect.xMax - xOffset);
             float randY = Random.Range(m_RectTransform.rect.yMin + yOffset, m_RectTransform.rect.yMax - yOffset);
             word.localPosition = new Vector3(randX, randY, 0);
+        }
+
+        IEnumerator WaitForKeyUp()
+        {
+            isSwitching = true;
+            yield return new WaitUntil(() => !Input.anyKey);
+            isSwitching = false;
+        }
+
+        public void Reset()
+        {
+            timeOut = false;
+        }
+
+        public void TimesUp()
+        {
+            timeOut = true;
         }
     }
 }
