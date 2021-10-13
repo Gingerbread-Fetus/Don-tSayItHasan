@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GirlsRoster:
   - {fileID: 11400000, guid: 7f062e64feedfd84693ccd36a96f7ab9, type: 2}
+  - {fileID: 11400000, guid: 7f062e64feedfd84693ccd36a96f7ab9, type: 2}
+  - {fileID: 11400000, guid: 7f062e64feedfd84693ccd36a96f7ab9, type: 2}
