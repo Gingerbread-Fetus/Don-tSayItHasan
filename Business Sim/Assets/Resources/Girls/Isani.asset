@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Isani
   m_EditorClassIdentifier: 
   characterName: Isani
+  coverImage: {fileID: 21300000, guid: a0a2cff19e8b53b4fa4ae565fb5899bb, type: 3}
   images:
   - {fileID: 21300000, guid: 68571617821abb74983b894a67e940ec, type: 3}
   - {fileID: 21300000, guid: 42e4e64d65f86bc4a91aa0ee81fcd9b5, type: 3}

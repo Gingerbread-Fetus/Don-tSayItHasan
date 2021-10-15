@@ -11,7 +11,7 @@ namespace Girls
         
         [SerializeField]
         string characterName = "";
-
+        public Sprite coverImage;
         public Sprite[] images;
     }
 }
