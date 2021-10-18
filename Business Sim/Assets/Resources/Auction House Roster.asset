@@ -10,6 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca47002aba9990e498e0cac84a8b248f, type: 3}
-  m_Name: Roster
+  m_Name: Auction House Roster
   m_EditorClassIdentifier: 
-  GirlsRoster: []
+  GirlsRoster:
+  - {fileID: 11400000, guid: 7f062e64feedfd84693ccd36a96f7ab9, type: 2}
+  - {fileID: 11400000, guid: a9822cc0283cca14c944db48dee6b1bf, type: 2}
+  - {fileID: 11400000, guid: 4d9336f26a0ac8f4eb3b2eaed70c5a02, type: 2}

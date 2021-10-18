@@ -16,7 +16,7 @@ namespace UI
         }
         
         private void OnEnable() {
-            UIImage.sprite = girlImages[0];
+            UIImage.sprite = girlImages[0];//TODO: What if no girls working?
             currentImage = 0;
         }
 
@@ -24,7 +24,7 @@ namespace UI
             girlImages.Clear();
         }
 
-        public void SetPictures(SlaveGirl[] girls)
+        public void SetPictures(List<SlaveGirl> girls)
         {
             foreach (SlaveGirl girl in girls)
             {

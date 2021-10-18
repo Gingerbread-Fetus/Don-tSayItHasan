@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca47002aba9990e498e0cac84a8b248f, type: 3}
-  m_Name: Roster
+  m_Script: {fileID: 11500000, guid: 6e227d2d18f293e41a305ea342eadf3e, type: 3}
+  m_Name: PlayerInventory
   m_EditorClassIdentifier: 
-  GirlsRoster: []
+  money: 100
